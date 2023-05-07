@@ -10,7 +10,7 @@ public class Processor {
     private String brand;
     private String model;
     private int numberOfCores;
-    @Column(name = "frequency") // име на колоната, което искам да се показва в таблицата
+    @Column(name = "frequency")
     private int processorFrequency;
 
     public int getId() {

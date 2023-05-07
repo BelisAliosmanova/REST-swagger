@@ -23,6 +23,10 @@ public class LaptopController {
     public ResponseEntity<Laptop> addLaptop(@RequestBody Laptop laptop, UriComponentsBuilder uriComponentsBuilder) {
         return laptopService.addLaptop(laptop, uriComponentsBuilder);
     }
+    @GetMapping("/getLaptopMyManufacturerName/{name}")
+    public ResponseEntity<List<Laptop>> getLaptopByManufacturerName(@PathVariable("name") String manufacturerName){
+        return laptopService.getLaptopByManufacturerName(manufacturerName);
+    }
 
     @GetMapping("/getLaptop/{id}")
     public ResponseEntity<Laptop> getLaptopById(@PathVariable("id") int id) {

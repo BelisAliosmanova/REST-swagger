@@ -31,6 +31,10 @@ public class LaptopService {
         Optional<Laptop> laptop = laptopRepository.findById(id);
         return laptop.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    public ResponseEntity<List<Laptop>> getLaptopByManufacturerName(String manufacturerName){
+        List<Laptop> laptops = laptopRepository.getLaptopByManufacturerName(manufacturerName);
+        return ResponseEntity.ok(laptops);
+    }
 
     public ResponseEntity<Laptop> deleteLaptopById(int id) {
         laptopRepository.deleteById(id);
