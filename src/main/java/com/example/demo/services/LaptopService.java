@@ -36,6 +36,10 @@ public class LaptopService {
         List<Laptop> laptops = laptopRepository.getLaptopByManufacturerName(manufacturerName);
         return ResponseEntity.ok(laptops);
     }
+    public ResponseEntity<List<Laptop>> getLaptopByProcessorModel(String model){
+        List<Laptop> laptops = laptopRepository.getLaptopByProcessorModel(model);
+        return ResponseEntity.ok(laptops);
+    }
 
     public ResponseEntity<Laptop> deleteLaptopById(int id) {
         laptopRepository.deleteById(id);

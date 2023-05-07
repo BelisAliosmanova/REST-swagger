@@ -24,13 +24,14 @@ public class LaptopController {
     public ResponseEntity<Laptop> addLaptop(@RequestBody Laptop laptop, UriComponentsBuilder uriComponentsBuilder) {
         return laptopService.addLaptop(laptop, uriComponentsBuilder);
     }
-    @GetMapping("/getLaptopMyManufacturerName/{name}")
+    @GetMapping("/getLaptopByManufacturerName/{name}")
     public ResponseEntity<List<Laptop>> getLaptopByManufacturerName(@PathVariable("name") String manufacturerName){
         return laptopService.getLaptopByManufacturerName(manufacturerName);
     }
-//    trying
-//    merge
-//    conflicts
+    @GetMapping("/getLaptopByProcessorModel/{model}")
+    public ResponseEntity<List<Laptop>> getLaptopByProcessorModel(@PathVariable("model") String processorModel){
+        return laptopService.getLaptopByProcessorModel(processorModel);
+    }
 
     @GetMapping("/getLaptop/{id}")
     public ResponseEntity<Laptop> getLaptopById(@PathVariable("id") int id) {
