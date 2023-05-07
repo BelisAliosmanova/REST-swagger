@@ -28,21 +28,20 @@ public class LaptopController {
     public ResponseEntity<List<Laptop>> getLaptopByManufacturerName(@PathVariable("name") String manufacturerName){
         return laptopService.getLaptopByManufacturerName(manufacturerName);
     }
+    @DeleteMapping("/deleteLaptop/{id}")
+    public ResponseEntity<Laptop> deleteLaptopById(@PathVariable("id") int id) {
+        return laptopService.deleteLaptopById(id);
+    }
     @GetMapping("/getLaptopByProcessorModel/{model}")
     public ResponseEntity<List<Laptop>> getLaptopByProcessorModel(@PathVariable("model") String processorModel){
         return laptopService.getLaptopByProcessorModel(processorModel);
     }
-    //
 
     @GetMapping("/getLaptop/{id}")
     public ResponseEntity<Laptop> getLaptopById(@PathVariable("id") int id) {
         return laptopService.getLaptopById(id);
     }
 
-    @DeleteMapping("/deleteLaptop/{id}")
-    public ResponseEntity<Laptop> deleteLaptopById(@PathVariable("id") int id) {
-        return laptopService.deleteLaptopById(id);
-    }
 
     @PutMapping("/updateLaptop{id}")
     public ResponseEntity<Laptop> updateLaptop(@PathVariable(value = "id") int id, @RequestBody Laptop updatedLaptop) throws ChangeSetPersister.NotFoundException {
