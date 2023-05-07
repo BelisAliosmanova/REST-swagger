@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.entities.Laptop;
 import com.example.demo.repositories.LaptopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,30 +41,16 @@ public class LaptopService {
         laptopRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
-    public ResponseEntity<Laptop> updateLaptop(int id, Laptop laptop) {
-        Optional<Laptop> optionalLaptop = laptopRepository.findById(id);
-        if (optionalLaptop.isPresent()) {
-            Laptop newLaptop = optionalLaptop.get();
-            if (laptop.getModel() != null) {
-                newLaptop.setModel(laptop.getModel());
-            }
-            if (laptop.getYearOfManufacture() != null) {
-                newLaptop.setModel(laptop.getYearOfManufacture());
-            }
-            if (laptop.getPrice() != 0) {
-                newLaptop.setPrice(laptop.getPrice());
-            }
-            if (laptop.getRAM() != 0) {
-                newLaptop.setRAM(laptop.getRAM());
-            }
-            if (laptop.getHDD() != 0) {
-                newLaptop.setHDD(laptop.getHDD());
-            }
-            laptopRepository.save(newLaptop);
-            return ResponseEntity.ok(newLaptop);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Laptop> updateLaptop(int id, Laptop updatedLaptop) throws ChangeSetPersister.NotFoundException {
+        Laptop laptopToUpdate = laptopRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        laptopToUpdate.setManufacturer(updatedLaptop.getManufacturer());
+        laptopToUpdate.setModel(updatedLaptop.getModel());
+        laptopToUpdate.setYearOfManufacture(updatedLaptop.getYearOfManufacture());
+        laptopToUpdate.setPrice(updatedLaptop.getPrice());
+        laptopToUpdate.setRAM(updatedLaptop.getRAM());
+        laptopToUpdate.setHDD(updatedLaptop.getHDD());
+        laptopToUpdate.setProcessor(updatedLaptop.getProcessor());
+        Laptop savedLaptop = laptopRepository.save(laptopToUpdate);
+        return ResponseEntity.ok(savedLaptop);
     }
 }
