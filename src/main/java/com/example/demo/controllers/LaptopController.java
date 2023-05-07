@@ -37,6 +37,7 @@ public class LaptopController {
     public ResponseEntity<List<Laptop>> getLaptopByProcessorModel(@PathVariable("model") String processorModel){
         return laptopService.getLaptopByProcessorModel(processorModel);
     }
+
     @DeleteMapping("/deleteLaptop/{id}")
     public ResponseEntity<Laptop> deleteLaptopById(@PathVariable("id") int id) {
         return laptopService.deleteLaptopById(id);
