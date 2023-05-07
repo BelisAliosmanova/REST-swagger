@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.entities.Laptop;
 import com.example.demo.services.LaptopService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -39,7 +40,7 @@ public class LaptopController {
     }
 
     @PutMapping("/updateLaptop{id}")
-    public ResponseEntity<Laptop> updateLaptop(int id, @RequestBody Laptop laptop) {
-        return laptopService.updateLaptop(id,laptop);
+    public ResponseEntity<Laptop> updateLaptop(@PathVariable(value = "id") int id, @RequestBody Laptop updatedLaptop) throws ChangeSetPersister.NotFoundException {
+        return laptopService.updateLaptop(id, updatedLaptop);
     }
 }
