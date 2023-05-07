@@ -28,6 +28,9 @@ public class LaptopController {
     public ResponseEntity<List<Laptop>> getLaptopByManufacturerName(@PathVariable("name") String manufacturerName){
         return laptopService.getLaptopByManufacturerName(manufacturerName);
     }
+//    trying
+//    merge
+//    conflicts
 
     @GetMapping("/getLaptop/{id}")
     public ResponseEntity<Laptop> getLaptopById(@PathVariable("id") int id) {
