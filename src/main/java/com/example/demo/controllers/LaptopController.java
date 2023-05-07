@@ -32,6 +32,7 @@ public class LaptopController {
     public ResponseEntity<List<Laptop>> getLaptopByProcessorModel(@PathVariable("model") String processorModel){
         return laptopService.getLaptopByProcessorModel(processorModel);
     }
+    //
 
     @GetMapping("/getLaptop/{id}")
     public ResponseEntity<Laptop> getLaptopById(@PathVariable("id") int id) {
