@@ -28,6 +28,9 @@ public class ManufacturerController {
     public ResponseEntity<Manufacturer> getManufacturerById(@PathVariable("id") int id) {
         return manufacturerService.getManufacturerById(id);
     }
+//    trying
+//    merge
+//    conflicts
 
     @DeleteMapping("/deleteManufacturer/{id}")
     public ResponseEntity<Manufacturer> deleteManufacturerById(@PathVariable("id") int id) {
