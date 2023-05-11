@@ -3,4 +3,4 @@
 My task was to create a rest server and use swagger. </br>
 I also had to do a few github related tasks like commits, pull requests and so on. </br>
 I created classes for Laptop, Processor and Manufacturer with the necessary connections between them. </br>
-Following my mentor's prompts, I am now working on improving the code. :)
+Improving the project... :)
