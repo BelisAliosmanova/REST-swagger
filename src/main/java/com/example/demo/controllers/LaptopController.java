@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dtos.LaptopDTO;
 import com.example.demo.entities.Laptop;
 import com.example.demo.services.LaptopService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class LaptopController {
     private final LaptopService laptopService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Laptop>> getAllLaptops() {
-        List<Laptop> laptops = laptopService.getAllLaptops();
+    public ResponseEntity<List<LaptopDTO>> getAllLaptops() {
+        List<LaptopDTO> laptops = laptopService.getAllLaptops();
         var status = laptops.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
         return ResponseEntity.status(status).body(laptops);
     }
@@ -32,20 +33,20 @@ public class LaptopController {
     }
 
     @GetMapping("/getLaptop/{id}")
-    public ResponseEntity<Laptop> getLaptopById(@PathVariable("id") int id) {
-        return laptopService.getLaptopById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<LaptopDTO> getLaptopById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(laptopService.getLaptopById(id));
     }
 
     @GetMapping("/getLaptopByManufacturerName/{name}")
-    public ResponseEntity<List<Laptop>> getLaptopByManufacturerName(@PathVariable("name") String manufacturerName) {
-        List<Laptop> laptops = laptopService.getLaptopByManufacturerName(manufacturerName);
+    public ResponseEntity<List<LaptopDTO>> getLaptopByManufacturerName(@PathVariable("name") String manufacturerName) {
+        List<LaptopDTO> laptops = laptopService.getLaptopByManufacturerName(manufacturerName);
         var status = laptops.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
         return ResponseEntity.status(status).body(laptops);
     }
 
     @GetMapping("/getLaptopByProcessorModel/{model}")
-    public ResponseEntity<List<Laptop>> getLaptopByProcessorModel(@PathVariable("model") String processorModel) {
-        List<Laptop> laptops = laptopService.getLaptopByProcessorModel(processorModel);
+    public ResponseEntity<List<LaptopDTO>> getLaptopByProcessorModel(@PathVariable("model") String processorModel) {
+        List<LaptopDTO> laptops = laptopService.getLaptopByProcessorModel(processorModel);
         var status = laptops.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
         return ResponseEntity.status(status).body(laptops);
     }
@@ -57,7 +58,7 @@ public class LaptopController {
     }
 
     @PutMapping("/updateLaptop{id}")
-    public ResponseEntity<Laptop> updateLaptop(@PathVariable(value = "id") int id, @RequestBody Laptop updatedLaptop) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<LaptopDTO> updateLaptop(@PathVariable(value = "id") int id, @RequestBody Laptop updatedLaptop) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(laptopService.updateLaptop(id, updatedLaptop));
     }
 }

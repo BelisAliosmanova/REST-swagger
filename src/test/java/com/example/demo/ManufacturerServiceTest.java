@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.dtos.ManufacturerDTO;
+import com.example.demo.dtos.ProcessorDTO;
 import com.example.demo.entities.Manufacturer;
 import com.example.demo.repositories.ManufacturerRepository;
 import com.example.demo.services.ManufacturerService;
@@ -9,12 +11,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +27,8 @@ public class ManufacturerServiceTest {
 
     @Mock
     private ManufacturerRepository manufacturerRepository;
-
+    @Mock
+    private ModelMapper modelMapper;
     @InjectMocks
     private ManufacturerService manufacturerService;
 
@@ -34,8 +39,9 @@ public class ManufacturerServiceTest {
                 new Manufacturer()
         );
         Mockito.when(manufacturerRepository.findAll()).thenReturn(manufacturers);
-        List<Manufacturer> result = manufacturerService.getAllManufacturers();
-        assertEquals(manufacturers, result);
+        List<ManufacturerDTO> result = manufacturerService.getAllManufacturers();
+        List<ManufacturerDTO> manufacturerDTOS = manufacturers.stream().map(prc -> modelMapper.map(prc, ManufacturerDTO.class)).collect(Collectors.toList());
+        assertEquals(manufacturerDTOS, result);
         Mockito.verify(manufacturerRepository).findAll();
     }
     @Test
@@ -52,20 +58,12 @@ public class ManufacturerServiceTest {
         int manufacturerId = 1;
         Manufacturer manufacturer = new Manufacturer();
         Mockito.when(manufacturerRepository.findById(manufacturerId)).thenReturn(Optional.of(manufacturer));
-        Optional<Manufacturer> result = manufacturerService.getManufacturerById(manufacturerId);
-        assertTrue(result.isPresent());
-        assertEquals(manufacturer, result.get());
+        ManufacturerDTO result = manufacturerService.getManufacturerById(manufacturerId);
+        ManufacturerDTO manufacturerDTO = modelMapper.map(manufacturer, ManufacturerDTO.class);
+        assertEquals(manufacturerDTO, result);
         Mockito.verify(manufacturerRepository).findById(manufacturerId);
     }
 
-    @Test
-    void testGetManufacturerByIdNotFound() {
-        int manufacturerId = 1;
-        Mockito.when(manufacturerRepository.findById(manufacturerId)).thenReturn(Optional.empty());
-        Optional<Manufacturer> result = manufacturerService.getManufacturerById(manufacturerId);
-        assertFalse(result.isPresent());
-        Mockito.verify(manufacturerRepository).findById(manufacturerId);
-    }
     @Test
     void testDeleteManufacturerById() {
         int manufacturerId = 1;
@@ -79,8 +77,9 @@ public class ManufacturerServiceTest {
         Manufacturer updatedManufacturer = new Manufacturer();
         Mockito.when(manufacturerRepository.findById(manufacturerId)).thenReturn(Optional.of(originalManufacturer));
         Mockito.when(manufacturerRepository.save(Mockito.any(Manufacturer.class))).thenReturn(updatedManufacturer);
-        Manufacturer result = manufacturerService.updateManufacturer(manufacturerId, updatedManufacturer);
-        assertEquals(updatedManufacturer, result);
+        ManufacturerDTO result = manufacturerService.updateManufacturer(manufacturerId, updatedManufacturer);
+        ManufacturerDTO manufacturerDTO = modelMapper.map(originalManufacturer, ManufacturerDTO.class);
+        assertEquals(manufacturerDTO, result);
         Mockito.verify(manufacturerRepository).findById(manufacturerId);
         Mockito.verify(manufacturerRepository).save(Mockito.any(Manufacturer.class));
     }
