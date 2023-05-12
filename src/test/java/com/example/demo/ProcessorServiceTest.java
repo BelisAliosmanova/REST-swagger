@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.dtos.ProcessorDTO;
 import com.example.demo.entities.Processor;
 import com.example.demo.repositories.ProcessorRepository;
 import com.example.demo.services.ProcessorService;
@@ -9,21 +10,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class ProcessorServiceTest {
     @Mock
     private ProcessorRepository processorRepository;
-
+    @Mock
+    private ModelMapper modelMapper;
     @InjectMocks
     private ProcessorService processorService;
 
@@ -34,8 +37,9 @@ public class ProcessorServiceTest {
                 new Processor()
         );
         Mockito.when(processorRepository.findAll()).thenReturn(processors);
-        List<Processor> result = processorService.getAllProcessors();
-        assertEquals(processors, result);
+        List<ProcessorDTO> result = processorService.getAllProcessors();
+        List<ProcessorDTO>processors1 = processors.stream().map(prc -> modelMapper.map(prc, ProcessorDTO.class)).collect(Collectors.toList());
+        assertEquals(processors1, result);
         Mockito.verify(processorRepository).findAll();
     }
     @Test
@@ -52,9 +56,9 @@ public class ProcessorServiceTest {
         int processorId = 1;
         Processor processor = new Processor();
         Mockito.when(processorRepository.findById(processorId)).thenReturn(Optional.of(processor));
-        Optional<Processor> result = processorService.getProcessorById(processorId);
-        assertTrue(result.isPresent());
-        assertEquals(processor, result.get());
+        ProcessorDTO result = processorService.getProcessorById(processorId);
+        ProcessorDTO processor1 = modelMapper.map(processor, ProcessorDTO.class);
+        assertEquals(processor1, result);
         Mockito.verify(processorRepository).findById(processorId);
     }
 
@@ -62,8 +66,7 @@ public class ProcessorServiceTest {
     void testGetProcessorByIdNotFound() {
         int processorId = 1;
         Mockito.when(processorRepository.findById(processorId)).thenReturn(Optional.empty());
-        Optional<Processor> result = processorService.getProcessorById(processorId);
-        assertFalse(result.isPresent());
+        ProcessorDTO result = processorService.getProcessorById(processorId);
         Mockito.verify(processorRepository).findById(processorId);
     }
     @Test
@@ -79,8 +82,9 @@ public class ProcessorServiceTest {
         Processor updatedProcessor = new Processor();
         Mockito.when(processorRepository.findById(processorId)).thenReturn(Optional.of(originalProcessor));
         Mockito.when(processorRepository.save(Mockito.any(Processor.class))).thenReturn(updatedProcessor);
-        Processor result = processorService.updateProcessor(processorId, updatedProcessor);
-        assertEquals(updatedProcessor, result);
+        ProcessorDTO result = processorService.updateProcessor(processorId, updatedProcessor);
+        ProcessorDTO updatedProcessor1 = modelMapper.map(originalProcessor, ProcessorDTO.class);
+        assertEquals(updatedProcessor1, result);
         Mockito.verify(processorRepository).findById(processorId);
         Mockito.verify(processorRepository).save(Mockito.any(Processor.class));
     }

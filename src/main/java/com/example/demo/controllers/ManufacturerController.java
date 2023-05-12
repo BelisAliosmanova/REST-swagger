@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dtos.ManufacturerDTO;
 import com.example.demo.entities.Manufacturer;
 import com.example.demo.services.ManufacturerService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class ManufacturerController {
     private final ManufacturerService manufacturerService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Manufacturer>> getAllManufacturers() {
-        List<Manufacturer> manufacturers = manufacturerService.getAllManufacturers();
+    public ResponseEntity<List<ManufacturerDTO>> getAllManufacturers() {
+        List<ManufacturerDTO> manufacturers = manufacturerService.getAllManufacturers();
         var status = manufacturers.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
         return ResponseEntity.status(status).body(manufacturers);
     }
@@ -32,8 +33,8 @@ public class ManufacturerController {
     }
 
     @GetMapping("/getManufacturer/{id}")
-    public ResponseEntity<Manufacturer> getManufacturerById(@PathVariable("id") int id) {
-        return manufacturerService.getManufacturerById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ManufacturerDTO> getManufacturerById(@PathVariable("id") int id) {
+        return ResponseEntity.ok(manufacturerService.getManufacturerById(id));
     }
 
     @DeleteMapping("/deleteManufacturer/{id}")
@@ -43,7 +44,7 @@ public class ManufacturerController {
     }
 
     @PutMapping("/updateManufacturer{id}")
-    public ResponseEntity<Manufacturer> updateManufacturer(int id, @RequestBody Manufacturer manufacturer) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<ManufacturerDTO> updateManufacturer(int id, @RequestBody Manufacturer manufacturer) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(manufacturerService.updateManufacturer(id, manufacturer));
     }
 }
