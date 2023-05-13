@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "laptop")
 @EntityListeners(AuditingEntityListener.class)
 public class Laptop {
     @Id
